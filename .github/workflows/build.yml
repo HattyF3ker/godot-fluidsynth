@@ -23,9 +23,6 @@ jobs:
           pkg-config \
           build-essential
 
-    - name: Make assets
-      run: make assets
-
     - name: Compile godot-cpp
       run: make godot-cpp
 
