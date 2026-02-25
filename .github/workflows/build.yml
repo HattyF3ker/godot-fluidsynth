@@ -1,0 +1,43 @@
+name: Compile godot-fluidsynth
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libfluidsynth-dev \
+          abcmidi \
+          scons \
+          pkg-config \
+          build-essential
+
+    - name: Make assets
+      run: make assets
+
+    - name: Compile godot-cpp
+      run: make godot-cpp
+
+    - name: Compile extensión
+      run: make
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: godot-fluidsynth-linux
+        path: |
+          bin/
+          addons/midi/
+          *.gdextension
+        if-no-files-found: error
